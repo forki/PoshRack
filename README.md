@@ -40,9 +40,7 @@ Show-RSAccounts
 ```
 AccountName,RackspaceUsername,RackspacePassword,RackspaceAPIKey,Region
 RackIAD,username_here,apikey_here,IAD
-
 RackDFW,username_here,apikey_here,dfw
-
 RackORD,username_here,apikey_here,Ord
 ```
 
