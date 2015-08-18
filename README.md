@@ -1,7 +1,7 @@
 #PoshRack
 
 #Description
-PoshStack is a Microsoft PowerShell v5 (or higher) client for OpenStack, built on the Rackspace.NET SDK v1.
+PoshStack is a Microsoft PowerShell v5 (or higher) client for the Rackspace-specific extensions to OpenStack, built on the Rackspace.NET SDK v1.
 
 The goal of this project is to give command line access to the Rackspace cloud from the Windows PowerShell client, allowing Windows system administrators, DevOps engineers and developers to easily and quickly manage and automate their work.
 
@@ -24,11 +24,10 @@ install-module PoshRack
 #### Configure
 ##### Important Note: The RSCloudAccounts.csv file location and name is specified in the user profile, using the variable "$RSAccounts". See the included file profile.ps1 for an example
 
-Update the CloudAccounts.csv file with your cloud account credentials:  
-  * _AccountName_ - User-defined name for the account. This can be pretty much anything you desire, and it's only used in the context of PoshRack. For example, you may choose to name the accounts based on the default regions you assign to them. This _AccountName_ is **not** the same as your _RackspaceUsername_.
+Update the RSCloudAccounts.csv file with your cloud account credentials:  
+  * _AccountName_ - User-defined name for the account. This can be pretty much anything you desire, and it's only used in the context of PoshRack. For example, you may choose to name the accounts based on the default regions you assign to them (e.g. RackIAD or RackDFW). This _AccountName_ is **not** the same as your _RackspaceUsername_.
   * _RackspaceUsername_ - This is your Rackspace.
   * _RackspaceAPIKey_ - This is your API key.
-  * _RackspaceAccountNbr_ - This is your account number.
   * _Region_ - This is your default region.
 
 You can see your Rackspace cloud accounts configuration by running
@@ -38,11 +37,10 @@ Show-RSAccounts
 
 ##### An example of the contents of RSCloudAccounts.csv
 
-Type,AccountName,CloudUsername,CloudPassword,CloudAPIKey,IdentityEndpointUri,Region,TenantId
-Rackspace,rackIAD,username_here,password_here,apikey_here,foo,IAD,123456
-Rackspace,rackDFW,username_here,password_here,apikey_here,foo,dfw,123456
-Rackspace,rackORD,username_here,password_here,apikey_here,foo,ord,123456
-OpenStack,devstack,username_here,password_here,foo,http://99.99.99.99:5000/v2.0/tokens/,RegionOne,username_here
+AccountName,RackspaceUsername,RackspacePassword,RackspaceAPIKey,Region
+RackIAD,username_here,apikey_here,IAD
+RackDFW,username_here,apikey_here,dfw
+RackORD,username_here,apikey_here,Ord
 
 ## Contributing is a cinch as well...
 Make your contribution to the goodness. Fork the code, pick an issue, and get coding. If you're unsure where to start or what it all means, choose an issue and leave a comment, asking for assistance.
