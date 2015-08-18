@@ -37,10 +37,14 @@ Show-RSAccounts
 
 ##### An example of the contents of RSCloudAccounts.csv
 
+```
 AccountName,RackspaceUsername,RackspacePassword,RackspaceAPIKey,Region
 RackIAD,username_here,apikey_here,IAD
+
 RackDFW,username_here,apikey_here,dfw
+
 RackORD,username_here,apikey_here,Ord
+```
 
 ## Contributing is a cinch as well...
 Make your contribution to the goodness. Fork the code, pick an issue, and get coding. If you're unsure where to start or what it all means, choose an issue and leave a comment, asking for assistance.
