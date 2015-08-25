@@ -22,7 +22,7 @@ RootModule = 'PoshRackMaster.psm1'
 ModuleVersion = '0.0.1'
 
 # ID used to uniquely identify this module
-GUID = '162fdc1b-64cd-471d-9137-0afa66aabee4'
+GUID = '8504a36c-ac67-450c-8f42-347b22648ca2'
 
 # Author of this module
 Author = 'don.schenck@rackspace.com'
@@ -34,7 +34,7 @@ CompanyName = 'Rackspace Hosting'
 Copyright = ''
 
 # Description of the functionality provided by this module
-Description = "PowerShell v5 module for OpenStack, based on the OpenStack.NET SDK"
+Description = "PowerShell v5 module for the Rackspace cloud, based on the Rackspace.NET SDK"
 
 # Minimum version of the Windows PowerShell engine required by this module
  PowerShellVersion = '3.0'
@@ -77,9 +77,9 @@ NestedModules =  @(
 #"PoshRack-OpenStackDatabases.psm1",
 #"PoshRack-OpenStackObjectStorage.psm1",
 "PoshRack-LoadBalancers.psm1",
-"PoshRack-Identity.psm1"
+"PoshRack-Identity.psm1",
 #"PoshRack-OpenStackBlockStorage.psm1",
-#"PoshRack-OpenStackNetworks.psm1",
+"PoshRack-Networks.psm1"
 #"PoshRack-OpenStackCompute.psm1",
 #"PoshRack-OpenStackDNS.psm1"
 )

@@ -1,6 +1,6 @@
 ﻿<############################################################################################
 
-PoshStack
+PoshRack
                                                        Master Module 
                                                          Version 0.1
 
@@ -13,8 +13,8 @@ Description
 ############################################################################################>
 
 # Cloud account configuration file
-$Global:PoshStackConfigFile = $env:USERPROFILE + "\Documents\WindowsPowerShell\Modules\PoshStack\CloudAccounts.csv" 
-#$Global:PoshStackConfigFile = $openstackAccounts 
+$Global:PoshRackConfigFile = $env:USERPROFILE + "\Documents\WindowsPowerShell\Modules\PoshRack\RSCloudAccounts.csv" 
+#$Global:PoshRackConfigFile = $RSAccounts 
 
 ############################################################################################
 #
@@ -24,22 +24,8 @@ $Global:PoshStackConfigFile = $env:USERPROFILE + "\Documents\WindowsPowerShell\M
 #
 ############################################################################################
 
-#function Get-OpenStackIdentityProvider {
-#    [CmdletBinding()]
-#    param (
-#        [Parameter(Mandatory=$True)][string] $Username = $(throw "Please specify required Username with -Username parameter"),
-#        [Parameter(Mandatory=$True)][string] $APIKey = $(throw "Please specify required API Key with -APIKey parameter")
-#    )
-#
-#    # Get Identity Provider
-#    $OpenStackId    = New-Object net.openstack.Core.Domain.CloudIdentity
-#    $OpenStackId.Username = $Username
-#    $OpenStackId.APIKey   = $APIKey
-#    $cip = New-Object net.openstack.Providers.Rackspace.CloudIdentityProvider($OpenStackId)
-#    Return $OpenStackId
-#}
 
-function Get-OpenStackIdentityProviderOpenStack {
+function Get-RSIdentityProvider {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory=$True)][string] $Username = $(throw "Please specify required Username with -Username parameter"),
@@ -48,7 +34,7 @@ function Get-OpenStackIdentityProviderOpenStack {
         [Parameter(Mandatory=$True)][System.Uri] $Uri = $(throw "Please specify required Identity Endpoint Uri with -Uri parameter")
     )
 
-    $OpenStackIdentityWithProject = New-Object net.openstack.Core.Domain.CloudIdentityWithProject
+    $OpenStackIdentityWithProject = New-Object net.RS.Core.Domain.CloudIdentityWithProject
     $OpenStackIdentityWithProject.Password = $Password
     $OpenStackIdentityWithProject.Username = $Username
     $OpenStackIdentityWithProject.ProjectId = $ProjectId
@@ -57,25 +43,25 @@ function Get-OpenStackIdentityProviderOpenStack {
 
 }
 
-function Get-OpenStackAccount {
+function Get-RSAccount {
     <#
-    Read $Global:PoshStackConfigFile then populate global account variables 
+    Read $Global:PoshRackConfigFile then populate global account variables 
     based on value of $Global:account
     #>
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$True)][string] $Account = $(throw "Please specify required OpenStack Account by using the -Account parameter")
+        [Parameter(Mandatory=$True)][string] $Account = $(throw "Please specify required Rackspace Account by using the -Account parameter")
     )
 
     try {
         # Search $ConfigFile file for $account entry and populate temporary $conf with relevant details
-        $Global:Credentials = Import-Csv $PoshStackConfigFile | Where-Object {$_.AccountName -eq $Account}
+        $Global:Credentials = Import-Csv $PoshRackConfigFile | Where-Object {$_.AccountName -eq $Account}
         
 
         # Raise exception if specified $account is not found in conf file
         if ($Credentials.AccountName -eq $null) {
-            throw "Get-OpenStackAccount: Account `"$account`"  is not defined in the configuration (CloudAccounts.csv) file"
+            throw "Get-RSAccount: Account `"$account`"  is not defined in the configuration (RSCloudAccounts.csv) file"
         }
 
     }
@@ -114,8 +100,9 @@ function Show-UntestedWarning {
     }
 }
 
-function Show-OpenStackAccounts {
-    Import-Csv $Global:PoshStackConfigFile | ft -AutoSize
+function Show-RSAccounts {
+
+    Import-Csv $Global:PoshRackConfigFile | ft -AutoSize
 
 <#
  .SYNOPSIS
@@ -127,10 +114,6 @@ function Show-OpenStackAccounts {
  .EXAMPLE
  PS H:\> Show-CloudAccounts
 
- AccountName CloudUsername  CloudAPIKey                      CloudDDI Region
- ----------- -------------  -----------                      -------- ------
- prod        cloudProd      awefsrw2w34rf214aff46d3b9a73c6b0 11111111 LON   
- dev         cloudDev       9c2a200od18303ab763wt34gsd4bdb70 00000000 IAD 
 
 #>
 }
