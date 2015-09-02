@@ -1,1 +1,1 @@
-$openstackAccounts = "C:\temp\CloudAccounts.csv"
+$RSAccounts = "C:\temp\RSCloudAccounts.csv"

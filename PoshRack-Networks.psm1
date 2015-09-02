@@ -41,7 +41,7 @@ function Get-RSNetworkService {
     Return $Networkservice
 }
 
-function New-RSNetwork {
+function Add-RSNetwork {
     Param(
         [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
         [Parameter (Mandatory=$True)] [string] $NetworkName = $(throw "Network Name is required"),
@@ -67,7 +67,7 @@ function New-RSNetwork {
     try {
 
         # DEBUGGING       
-        Write-Debug -Message "New-RSNetwork"
+        Write-Debug -Message "Add-RSNetwork"
         Write-Debug -Message "Account.........................: $Account" 
         Write-Debug -Message "NetworkName.....................: $NetworkName"
         Write-Debug -Message "Region..........................: $Region" 
@@ -84,9 +84,24 @@ function New-RSNetwork {
 }
 
 function Get-RSNetwork {
+    [CmdletBinding()]
     Param(
-        [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
-        [Parameter (Mandatory=$False)][string] $RegionOverride
+        [Parameter(ParameterSetName="List", Mandatory=$True)]
+        [Parameter(ParameterSetName="Network", Mandatory=$True)]
+        [string] $Account = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
+
+        [Parameter(ParameterSetName="List", Mandatory=$False)]
+        [Parameter(ParameterSetName="Network", Mandatory=$False)]
+        [string] $RegionOverride,
+
+        [Parameter(ParameterSetName="Network", Mandatory=$True)]
+        [string] $NetworkID,
+
+        [Parameter(ParameterSetName="List", Mandatory=$False)]
+        [string] $PageSize = 99,
+
+        [Parameter(ParameterSetName="List", Mandatory=$False)]
+        [string] $StartingNetworkID = $null
     )
 
     Get-RSAccount -Account $Account
@@ -111,13 +126,23 @@ function Get-RSNetwork {
         Write-Debug -Message "Get-RSNetwork"
         Write-Debug -Message "Account.........................: $Account" 
         Write-Debug -Message "Region..........................: $Region" 
+		Write-Debug -Message $PSCmdlet.ParameterSetName
 
         $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
-        $Start = New-Object -TypeName Rackspace.Identifier -ArgumentList @("ee9f1b13-47c9-42de-bece-cea26c910387")
-        [System.Nullable``1[[System.Int32]]] $pageSize = 99
-        
-       $NetworkService.ListNetworksAsync($null, $pageSize, $CancellationToken).Result
-        
+
+		if ($PSCmdlet.ParameterSetName -eq "List") {
+				# If getting a list of networks...
+				[System.Nullable``1[[System.Int32]]] $pageSize = 99
+				If ([String]::IsNullOrEmpty($StartingNetworkID)) {
+					$NetworkService.ListNetworksAsync($null, $pageSize, $CancellationToken).Result
+				} else {
+			        $_networkid = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $StartingNetworkID
+					$NetworkService.ListNetworksAsync($_networkid, $pageSize, $CancellationToken).Result
+				}
+			} else {
+		        $_networkid = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $NetworkID
+				$NetworkService.GetNetworkAsync($_networkid, $CancellationToken).Result
+		}
     }
     catch {
         Invoke-Exception($_.Exception)
@@ -143,10 +168,52 @@ function Get-RSNetwork {
 #>
 }
 
+function Remove-RSNetwork {
+	Param(
+		[Parameter (Mandatory=$True)] [string]    $Account           = $(throw "Account is required"),
+        [Parameter (Mandatory=$True)] [string]   $NetworkID         = $(throw "Network ID is required"),
+        [Parameter (Mandatory=$False)][string]   $RegionOverride
+	)
+    Get-RSAccount -Account $Account
+    
+    if ($RegionOverride){
+        $Global:RegionOverride = $RegionOverride
+    }
+
+    # Use Region code associated with Account, or was an override provided?
+    if ($RegionOverride) {
+        $Region = $Global:RegionOverride
+    } else {
+        $Region = $Credentials.Region
+    }
+
+
+    $NetworkService = Get-RSNetworkService -Account $Account -RegionOverride $Region
+
+    try {
+
+        # DEBUGGING       
+        Write-Debug -Message "Remove-RSNetworkPort"
+        Write-Debug -Message "Account.........................: $Account" 
+        Write-Debug -Message "NetworkID.......................: $NetworkID"
+        Write-Debug -Message "Region..........................: $Region" 
+
+        $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
+
+        $_networkid = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $NetworkID
+ 
+        $NetworkService.DeleteNetworkAsync($_networkid, $CancellationToken).Result
+
+    }
+    catch {
+        Invoke-Exception($_.Exception)
+    }
+}
+
 function Add-RSNetworkPort {
     Param(
         [Parameter (Mandatory=$True)] [string]   $Account           = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
-        [Parameter (Mandatory=$True)] [string]   $NetworkID         = $(throw "Port ID is required"),
+        [Parameter (Mandatory=$True)] [string]   $NetworkID         = $(throw "Network ID is required"),
         [Parameter (Mandatory=$False)][string]   $DeviceID          = $null,
         [Parameter (Mandatory=$False)][string]   $DeviceOwner       = $null,
         [Parameter (Mandatory=$False)][string[]] $IPAddressList     = $null,
@@ -185,27 +252,69 @@ function Add-RSNetworkPort {
         $_networkid = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $NetworkID
         $_portDefinition = New-Object -TypeName ([Rackspace.CloudNetworks.v2.PortCreateDefinition]) -ArgumentList $_networkid
 
-        if (![string]::IsNullOrEmpty($DeviceID)) {
-            $_portDefinition.DeviceId = $DeviceID
-        }
+#        if (![string]::IsNullOrEmpty($DeviceID)) {
+#            $_portDefinition.DeviceId = $DeviceID
+#        }
 
-        if (![string]::IsNullOrEmpty($PortName)) {
-            $_portDefinition.Name = $PortName
-        }
+#        if (![string]::IsNullOrEmpty($PortName)) {
+#            $_portDefinition.Name = $PortName
+#        }
 
-        if (![string]::IsNullOrEmpty($DeviceOwner)) {
-            $_portDefinition.DeviceOwner = $DeviceOwner
-        }
+#        if (![string]::IsNullOrEmpty($DeviceOwner)) {
+#            $_portDefinition.DeviceOwner = $DeviceOwner
+#        }
 
-        if (![string]::IsNullOrEmpty($IPAddressList)) {
-            $_portDefinition.FixedIPs = $IPAddressList
-        }
+#        if (![string]::IsNullOrEmpty($IPAddressList)) {
+#            $_portDefinition.FixedIPs = $IPAddressList
+#        }
 
-        if (![string]::IsNullOrEmpty($SecurityGroupList)) {
-            $_portDefinition.SecuityGroups = $SecurityGroupList
-        }
+#        if (![string]::IsNullOrEmpty($SecurityGroupList)) {
+#            $_portDefinition.SecurityGroups = $SecurityGroupList
+#        }
 
         $NetworkService.CreatePortAsync($_portDefinition, $CancellationToken).Result
+
+    }
+    catch {
+        Invoke-Exception($_.Exception)
+    }
+}
+
+function Remove-RSNetworkPort {
+	Param(
+		[Parameter (Mandatory=$True)] [string]   $Account         = $(throw "Account is required"),
+        [Parameter (Mandatory=$True)] [string]   $PortID          = $(throw "Port ID is required"),
+        [Parameter (Mandatory=$False)][string]   $RegionOverride
+	)
+    Get-RSAccount -Account $Account
+    
+    if ($RegionOverride){
+        $Global:RegionOverride = $RegionOverride
+    }
+
+    # Use Region code associated with Account, or was an override provided?
+    if ($RegionOverride) {
+        $Region = $Global:RegionOverride
+    } else {
+        $Region = $Credentials.Region
+    }
+
+
+    $NetworkService = Get-RSNetworkService -Account $Account -RegionOverride $Region
+
+    try {
+
+        # DEBUGGING       
+        Write-Debug -Message "Remove-RSNetworkPort"
+        Write-Debug -Message "Account.........................: $Account" 
+        Write-Debug -Message "PortID..........................: $PortID"
+        Write-Debug -Message "Region..........................: $Region" 
+
+        $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
+
+        $_id = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $PortID
+ 
+        $NetworkService.DeletePortAsync($_id, $CancellationToken).Result
 
     }
     catch {
@@ -258,6 +367,48 @@ function Add-RSNetworkSubnet {
             $_subnetDefinition = New-Object -TypeName ([Rackspace.CloudNetworks.v2.SubnetCreateDefinition]) -ArgumentList @($_networkid, ([Rackspace.CloudNetworks.IPVersion]::IPv6), $CIDR)
         }
         $NetworkService.CreateSubnetAsync($_subnetDefinition, $CancellationToken).Result
+
+    }
+    catch {
+        Invoke-Exception($_.Exception)
+    }
+}
+
+function Remove-RSNetworkSubnet {
+	Param(
+		[Parameter (Mandatory=$True)] [string]   $Account         = $(throw "Account is required"),
+        [Parameter (Mandatory=$True)] [string]   $SubnetID        = $(throw "Subnet ID is required"),
+        [Parameter (Mandatory=$False)][string]   $RegionOverride
+	)
+    Get-RSAccount -Account $Account
+    
+    if ($RegionOverride){
+        $Global:RegionOverride = $RegionOverride
+    }
+
+    # Use Region code associated with Account, or was an override provided?
+    if ($RegionOverride) {
+        $Region = $Global:RegionOverride
+    } else {
+        $Region = $Credentials.Region
+    }
+
+
+    $NetworkService = Get-RSNetworkService -Account $Account -RegionOverride $Region
+
+    try {
+
+        # DEBUGGING       
+        Write-Debug -Message "Remove-RSNetworkPort"
+        Write-Debug -Message "Account.........................: $Account" 
+        Write-Debug -Message "SubnetID........................: $SubnetID"
+        Write-Debug -Message "Region..........................: $Region" 
+
+        $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
+
+        $_id = New-Object -TypeName ([Rackspace.Identifier]) -ArgumentList $SubnetID
+ 
+        $NetworkService.DeleteSubnetAsync($_id, $CancellationToken).Result
 
     }
     catch {
@@ -434,5 +585,112 @@ function Update-RSNetwork {
         Invoke-Exception($_.Exception)
     }
 }
+
+function Update-RSNetworkSubnet {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [string]   $Account = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
+        [Parameter(Mandatory=$True)]
+        [string]   $SubnetID = $(throw "The -SubnetID parameter is required"),
+        [Parameter(Mandatory=$False)]
+        [string]   $RegionOverride,
+        [Parameter(Mandatory=$False)]
+        [string]   $SubnetName  = $null
+    )
+
+    Get-RSAccount -Account $Account
+    
+    if ($RegionOverride){
+        $Global:RegionOverride = $RegionOverride
+    }
+
+    # Use Region code associated with Account, or was an override provided?
+    if ($RegionOverride) {
+        $Region = $Global:RegionOverride
+    } else {
+        $Region = $Credentials.Region
+    }
+
+
+    $NetworkService = Get-RSNetworkService -Account $Account -RegionOverride $Region
+
+    try {
+
+        # DEBUGGING       
+        Write-Debug -Message "Update-RSNetworkSubnet"
+        Write-Debug -Message "Account.........................: $Account" 
+        Write-Debug -Message "SubnetID........................: $SubnetID" 
+        Write-Debug -Message "SubnetName......................: $SubnetName" 
+        Write-Debug -Message "Region..........................: $Region" 
+        
+        $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
+
+        $_id = New-Object Rackspace.Identifier $SubnetID
+
+        $UpdateDefinition = New-Object ([Rackspace.CloudNetworks.v2.SubnetUpdateDefinition])
+        $UpdateDefinition.Name = $SubnetName
+
+        $NetworkService.UpdateSubnetAsync($_id, $UpdateDefinition, $CancellationToken).Result
+
+    }
+    catch {
+        Invoke-Exception($_.Exception)
+    }
+}
+
+function Update-RSNetworkPort {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [string]   $Account = $(throw "Please specify the required Rackspace Account by using the -Account parameter"),
+        [Parameter(Mandatory=$True)]
+        [string]   $PortID = $(throw "The -PortID parameter is required"),
+        [Parameter(Mandatory=$False)]
+        [string]   $RegionOverride,
+        [Parameter(Mandatory=$False)]
+        [string]   $PortName  = $null
+    )
+
+    Get-RSAccount -Account $Account
+    
+    if ($RegionOverride){
+        $Global:RegionOverride = $RegionOverride
+    }
+
+    # Use Region code associated with Account, or was an override provided?
+    if ($RegionOverride) {
+        $Region = $Global:RegionOverride
+    } else {
+        $Region = $Credentials.Region
+    }
+
+
+    $NetworkService = Get-RSNetworkService -Account $Account -RegionOverride $Region
+
+    try {
+
+        # DEBUGGING       
+        Write-Debug -Message "Update-RSNetworkPort"
+        Write-Debug -Message "Account.........................: $Account" 
+        Write-Debug -Message "PortID..........................: $PortID" 
+        Write-Debug -Message "PortName........................: $PortName" 
+        Write-Debug -Message "Region..........................: $Region" 
+        
+        $CancellationToken = New-Object ([System.Threading.CancellationToken]::None)
+
+        $_id = New-Object Rackspace.Identifier $PortID
+
+        $UpdateDefinition = New-Object ([Rackspace.CloudNetworks.v2.PortUpdateDefinition])
+        $UpdateDefinition.Name = $PortName
+
+        $NetworkService.UpdatePortAsync($_id, $UpdateDefinition, $CancellationToken).Result
+
+    }
+    catch {
+        Invoke-Exception($_.Exception)
+    }
+}
+
 
 Export-ModuleMember -Function *
