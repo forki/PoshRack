@@ -100,7 +100,7 @@ function Show-UntestedWarning {
     }
 }
 
-function Show-RSAccounts {
+function Show-RSAccount {
 
     Import-Csv $Global:PoshRackConfigFile | ft -AutoSize
 
