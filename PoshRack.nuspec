@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>PoshRack</id>
+        <version>0.0.1</version>
+        <authors>opensource</authors>
+        <owners>opensource</owners>
+        <projectUrl>https://Github.com/DonSchenck/PoshRack</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>PoshRack is the PowerShell client for the Rackspace OpenStack cloud.</description>
+        <releaseNotes>Initial Release</releaseNotes>
+        <copyright>Copyright 2015</copyright>
+        <tags>PowerShell Racksspace OpenStack</tags>
+    </metadata>
+    <files>
+        <file src="bin\*" target="bin\" />
+        <file src="Examples\*" target="Examples\" />
+        <file src="*.psm1" target="" />
+        <file src="*.ps1" target="" />
+        <file src="PoshRack.psd1" target="PoshRack.psd1" />
+        <file src="poshrack_getting_started_guide.md" target="poshrack_getting_started_guide.md" />
+        <file src="README.md" target="README.md" />
+    </files>
+</package>
