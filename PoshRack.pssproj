@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Examples\Server_Create.ps1" />
     <Compile Include="LICENSE" />
     <Compile Include="PoshRack-Identity.psm1" />
     <Compile Include="PoshRack-Init.ps1" />
@@ -44,6 +45,7 @@
     <Compile Include="TEST_Networks.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Examples\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
