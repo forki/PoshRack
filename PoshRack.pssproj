@@ -38,7 +38,13 @@
     <Compile Include="PoshRackMaster.psm1" />
     <Compile Include="Profile.ps1" />
     <Compile Include="README.md" />
+    <Compile Include="Scripts\About this folder.txt" />
+    <Compile Include="Scripts\Build.ps1" />
+    <Compile Include="Scripts\PushToNuget.ps1" />
     <Compile Include="TEST_Networks.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
