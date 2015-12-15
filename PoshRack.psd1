@@ -74,7 +74,7 @@ Description = "PowerShell v5 module for the Rackspace cloud, based on the Racksp
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules =  @(
 #"PoshRack-CloudMonitoring.psm1",
-#"PoshRack-OpenStackDatabases.psm1",
+"PoshRack-Compute.psm1",
 #"PoshRack-OpenStackObjectStorage.psm1",
 "PoshRack-LoadBalancers.psm1",
 "PoshRack-Identity.psm1",

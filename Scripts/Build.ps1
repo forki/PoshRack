@@ -2,6 +2,13 @@
 # Build.ps1
 #
 
+
+# Run Pester tests and output to NUnit-compatible XML file. This
+# allows the CICD (Bamboo.com) to pick up the results.
+Invoke-Pester -OutputXml
+
+
+
 # If NUGET is NOT installed on the build machine, install it here and now.
 if(!( test-path $env:LocalAppData\NuGet\NuGet.exe)) {
   # download nuget
