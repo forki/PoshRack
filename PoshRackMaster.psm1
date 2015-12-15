@@ -13,8 +13,8 @@ Description
 ############################################################################################>
 
 # Cloud account configuration file
-$Global:PoshRackConfigFile = $env:USERPROFILE + "\Documents\WindowsPowerShell\Modules\PoshRack\RSCloudAccounts.csv" 
-#$Global:PoshRackConfigFile = $RSAccounts 
+#$Global:PoshRackConfigFile = $env:USERPROFILE + "\Documents\WindowsPowerShell\Modules\PoshRack\RSCloudAccounts.csv" 
+$Global:PoshRackConfigFile = $RSAccounts 
 
 ############################################################################################
 #

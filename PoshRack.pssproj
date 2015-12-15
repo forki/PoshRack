@@ -28,8 +28,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Examples\Server_Create.ps1" />
+    <Compile Include="Examples\Server_New.ps1" />
     <Compile Include="LICENSE" />
+    <Compile Include="PoshRack-Compute.psm1" />
+    <Compile Include="PoshRack-Compute.Tests.ps1" />
     <Compile Include="PoshRack-Identity.psm1" />
     <Compile Include="PoshRack-Init.ps1" />
     <Compile Include="PoshRack-LoadBalancers.psm1" />
