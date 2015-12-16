@@ -12,6 +12,7 @@ if(!( test-path $env:LocalAppData\NuGet\NuGet.exe)) {
 # If Pester is NOT installed on the build machine, install it here and now.
 if(-not(Get-Module -Name "Pester")) {
 	(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
+	Import-Module PsGet
 	Install-Module Pester -Global 
 }
 
