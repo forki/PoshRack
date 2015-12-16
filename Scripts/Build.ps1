@@ -18,6 +18,7 @@ if(!(Get-Module -ListAvailable -Name "Pester"))  {
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 } else {
 	Import-Module Pester
+	Set-Location "$env:HOMEPATH\Documents\WindowsPowerShell\Modules\PoshRack"
 	Invoke-Pester -OutputFile pesterLog.xml -OutputFormat LegacyNUnitXml
 }
 
