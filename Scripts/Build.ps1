@@ -9,17 +9,14 @@ if(!( test-path $env:LocalAppData\NuGet\NuGet.exe)) {
 }
 
 
-# If Pester is NOT installed on the build machine, install it here and now.
-if(-not(Get-Module -Name "Pester")) {
-	(new-object Net.WebClient).DownloadString("http://psget.net/GetPsGet.ps1") | iex
-	Import-Module PsGet
-	Install-Module Pester -Global 
+# If Pester is installed on the build machine, run the tests.
+if((Get-Module -Name "Pester"))  {
+	Import-Module Pester
+	Invoke-Pester -OutputXml
+} else {
+	Write-Warning -Message "Pester tests were NOT run; Please install Pester on this machine."
 }
 
-# Run Pester tests and output to NUnit-compatible XML file. This
-# allows the CICD (Bamboo.com) to pick up the results.
-Import-Module Pester
-Invoke-Pester -OutputXml
 
 
 
