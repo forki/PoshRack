@@ -17,6 +17,7 @@ if(!(Get-Module -ListAvailable -Name "Pester"))  {
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 } else {
+	cd ../..
 	$env:psmodulepath += ";" + $pwd.Path
 	Import-Module Pester
 	Invoke-Pester -OutputFile pesterLog.xml -OutputFormat LegacyNUnitXml
