@@ -10,11 +10,15 @@ if(!( test-path $env:LocalAppData\NuGet\NuGet.exe)) {
 
 
 # If Pester is installed on the build machine, run the tests.
-if((Get-Module -Name "Pester"))  {
+if(!(Get-Module -ListAvailable -Name "Pester"))  {
+	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
+	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
+	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
+	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
+	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
+} else {
 	Import-Module Pester
 	Invoke-Pester -OutputXml
-} else {
-	Write-Warning -Message "Pester tests were NOT run; Please install Pester on this machine."
 }
 
 
