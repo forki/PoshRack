@@ -3,7 +3,7 @@
 #
 
 # If NUGET is NOT installed on the build machine, install it here and now.
-if(!( test-path $env:LocalAppData\NuGet\NuGet.exe)) {
+if(!(test-path $env:LocalAppData\NuGet\NuGet.exe)) {
   # download nuget
   Invoke-WebRequest 'https://www.nuget.org/nuget.exe' -OutFile "$($env:LocalAppData)\NuGet\NuGet.exe"
 }
@@ -18,7 +18,7 @@ if(!(Get-Module -ListAvailable -Name "Pester"))  {
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 } else {
 	Import-Module Pester
-	Set-Location "$env:HOMEPATH\Documents\WindowsPowerShell\Modules\PoshRack"
+	Set-Location $env:HOMEPATH\Documents\WindowsPowerShell\Modules\PoshRack
 	Invoke-Pester -OutputFile pesterLog.xml -OutputFormat LegacyNUnitXml
 }
 
