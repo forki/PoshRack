@@ -51,19 +51,27 @@ function Get-RSAccount {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$True)][string] $Account = $(throw "Please specify required Rackspace Account by using the -Account parameter")
+        [Parameter(Mandatory=$False)][string] $Account
     )
 
     try {
-        # Search $ConfigFile file for $account entry and populate temporary $conf with relevant details
-        $Global:Credentials = Import-Csv $PoshRackConfigFile | Where-Object {$_.AccountName -eq $Account}
-        
 
-        # Raise exception if specified $account is not found in conf file
-        if ($Credentials.AccountName -eq $null) {
-            throw "Get-RSAccount: Account `"$account`"  is not defined in the configuration (RSCloudAccounts.csv) file"
-        }
+		if (-not($Account)) {
+			# Use environment variables			
+			$Global:Credentials = New-Object PSObject
+			Add-Member -InputObject $Credentials -MemberType NoteProperty -Name AccountName -Value $env:RACKSPACE_USERNAME
+			Add-Member -InputObject $Credentials -MemberType NoteProperty -Name RackspaceUsername -Value $env:RACKSPACE_USERNAME
+			Add-Member -InputObject $Credentials -MemberType NoteProperty -Name RackspaceAPIKey -Value $env:RACKSPACE_APIKEY
+			Add-Member -InputObject $Credentials -MemberType NoteProperty -Name Region -Value $env:RACKSPACE_REGION
+		} else {
+			# Search $ConfigFile file for $account entry and populate temporary $conf with relevant details
+			$Global:Credentials = Import-Csv $PoshRackConfigFile | Where-Object {$_.AccountName -eq $Account}
 
+			# Raise exception if specified $account is not found in conf file
+			if ($Credentials.AccountName -eq $null) {
+				throw "Get-RSAccount: Account `"$account`"  is not defined in the configuration (RSCloudAccounts.csv) file"
+			}
+		}
     }
     catch {
         Invoke-Exception($_.Exception)

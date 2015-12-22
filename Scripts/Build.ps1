@@ -17,6 +17,9 @@ if(!(Get-Module -ListAvailable -Name "Pester"))  {
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 	Write-Warning -Message "******* Pester tests were NOT run; Please install Pester on this machine."
 } else {
+	$env:RACKSPACE_USERNAME = $env:BAMBOO_RACKSPACE_USERNAME
+	$env:RACKSPACE_APIKEY = $env:BAMBOO_RACKSPACE_APIKEY
+	$env:RACKSPACE_REGION = $env:BAMBOO_RACKSPACE_REGION
 	cd ../..
 	$env:psmodulepath += ";" + $pwd.Path
 	Import-Module Pester
