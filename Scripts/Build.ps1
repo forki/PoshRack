@@ -32,7 +32,7 @@ if(!(Get-Module -ListAvailable -Name "Pester"))  {
 # Run PACK to build the Nuget package
 $CMD = "$env:LocalAppData\NuGet\NuGet.exe"
 $arg1 = 'pack'
-$arg2 = '..\PoshRack.nuspec'
+$arg2 = 'PoshRack.nuspec'
 $arg3 = "-NoPackageAnalysis"
 
 & $CMD $arg1 $arg2 $arg3
