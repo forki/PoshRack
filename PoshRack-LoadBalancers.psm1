@@ -519,7 +519,7 @@ function Clear-RSLBAccessList {
 }
 
 # Issue 55 Implement New-CloudLoadBalancer
-function New-OpenStackLoadBalancer {
+function New-RSLoadBalancer {
     Param(
         [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify required Cloud Account by using the -Account parameter"),
         [Parameter (Mandatory=$True)] [net.openstack.Providers.Rackspace.Objects.LoadBalancers.LoadBalancerConfiguration] $LBConfig = $(throw "Please specify the required Load Balancer Configuration by using the -LBConfig parameter"),
@@ -860,7 +860,7 @@ function Get-RSLBHealthMonitor {
 
 # Issue 60 Implement Get-CloudLoadBalancer
 # Issue 75 Implement Get-CloudLoadBalancers
-function Get-OpenStackLoadBalancer {
+function Get-RSLoadBalancer {
     Param(
         [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify required Cloud Account by using the -Account parameter"),
         [Parameter (Mandatory=$False)][net.openstack.Providers.Rackspace.Objects.LoadBalancers.LoadBalancerId] $LBID = $null,
@@ -1091,7 +1091,7 @@ function Get-RSLBNode {
 
 # Issue 63 Implement Get-CloudLoadBalancerNodeMetadataItem
 # Issue 76 Implement List-CloudLoadBalancerNodeMetadata
-function Get-CloudLoadBalancerNodeMetadataItem {
+function Get-RSLBNodeMetadataItem {
     Param(
         [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify required Cloud Account by using the -Account parameter"),
         [Parameter (Mandatory=$True)] [net.openstack.Providers.Rackspace.Objects.LoadBalancers.LoadBalancerId] $LBID = $(throw "Please specify the required Load Balancer ID by using the -LBID parameter"),

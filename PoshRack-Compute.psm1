@@ -4,8 +4,8 @@
 function script:Get-Provider {
     [CmdletBinding()]
     Param(
-        [Parameter (Mandatory=$True)] [string] $Account = $(throw "Parameter -Account is required"),
-        [Parameter (Mandatory=$False)][string] $RegionOverride
+        [Parameter (Mandatory=$False)] [string] $Account,
+        [Parameter (Mandatory=$False)] [string] $RegionOverride
         )
 
 	$Provider = Get-RSComputeProvider -Account $Account
@@ -29,11 +29,11 @@ function script:Get-Provider {
 function script:Get-RSComputeProvider {
     [CmdletBinding()]
     Param(
-        [Parameter (Mandatory=$True)] [string] $Account = $(throw "Please specify required OpenStack Account by using the -Account parameter")
+        [Parameter (Mandatory=$False)] [string] $Account
     )
 
     # The Account comes from the file RSCloudAccounts.csv
-
+	# If the Account is not used, then the username and APIKey must come from environment variables
     Get-RSAccount -Account $Account
 
     $RSId    = New-Object net.openstack.Core.Domain.CloudIdentity
@@ -43,10 +43,10 @@ function script:Get-RSComputeProvider {
     Return New-Object net.openstack.Providers.Rackspace.CloudServersProvider($RSId)
 }
 
-function Get-RSImage {
+function Get-RSComputeImage {
     [CmdletBinding()]
     Param(
-        [Parameter (Mandatory=$True,
+        [Parameter (Mandatory=$False,
 					ValueFromPipeline=$True,
 					HelpMessage='Account name')]
 			[string] $Account,
@@ -115,10 +115,15 @@ function Get-RSImage {
                     Write-Verbose "No Images found in region '$Provider.Region'."
                 }
                 elseif($ImageList.Count -ne 0){
+					foreach($i in $ImageList){
+						Add-Member -InputObject $i -MemberType NoteProperty -Name Region -Value $Provider.Region
+					}
         		    $ImageList;
                 }
             } else {
-                return $Provider.GetImage($ImageId, $Provider.Region, $Null)
+                $i = $Provider.GetImage($ImageId, $Provider.Region, $Null)
+				Add-Member -InputObject $i -MemberType NoteProperty -Name Region -Value $Provider.Region
+				$i
         }
     }
     catch {
@@ -126,10 +131,10 @@ function Get-RSImage {
     }
 }
 
-function New-RSServer {
+function New-RSComputeServer {
     [CmdletBinding()]
 	Param(
-		[Parameter(Mandatory=$True)]  [string]  $Account = $(throw "Parameter -Account is required."),
+		[Parameter(Mandatory=$False)] [string]  $Account,
         [Parameter(Mandatory=$true)]  [string]  $ServerName = $(throw "Please specify server name with -ServerName parameter"),
         [Parameter(Mandatory=$true)]  [string]  $ImageId = $(throw "Please specify the image Id with -ImageId parameter"),
         [Parameter(Mandatory=$true)]  [string]  $FlavorId = $(throw "Please specify server flavor with -FlavorId parameter"),
