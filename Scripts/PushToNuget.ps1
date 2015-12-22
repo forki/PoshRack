@@ -1,6 +1,7 @@
 #
 # PushToNuget.ps1
 #
+ cd PoshRack
 
 # First, we need to find the name of the package
 $PackageFile = Get-ChildItem -Filter *.nupkg | sort LastWriteTime | Select-Object -last 1
