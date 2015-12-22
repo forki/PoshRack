@@ -37,6 +37,7 @@
     <Compile Include="PoshRack-LoadBalancers.psm1" />
     <Compile Include="PoshRack-Networks.psm1" />
     <Compile Include="PoshRack-Networks.Tests.ps1" />
+    <Compile Include="PoshRack.nuspec" />
     <Compile Include="PoshRack.psd1" />
     <Compile Include="PoshRackMaster.psm1" />
     <Compile Include="Profile.ps1" />

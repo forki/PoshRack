@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>PoshRack</id>
-        <version>0.0.1</version>
+        <version>0.0.2</version>
         <authors>opensource</authors>
         <owners>opensource</owners>
         <projectUrl>https://Github.com/DonSchenck/PoshRack</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>PoshRack is the PowerShell client for the Rackspace OpenStack cloud.</description>
-        <releaseNotes>Initial Release</releaseNotes>
+        <releaseNotes>Now uses Pester for automated testing</releaseNotes>
         <copyright>Copyright 2015</copyright>
         <tags>PowerShell Racksspace OpenStack</tags>
     </metadata>
