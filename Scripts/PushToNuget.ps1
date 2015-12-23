@@ -3,7 +3,8 @@
 #
 
 Write-Warning "Starting at ..."
-Write-Warning Convert-Path .
+$START = Convert-Path .
+Write-Warning $START
 
 # First, we need to find the name of the package
 $PackageFile = Get-ChildItem -Filter *.nupkg | sort LastWriteTime | Select-Object -last 1
