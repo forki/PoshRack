@@ -2,9 +2,10 @@
 # PushToNuget.ps1
 #
 
-Write-Warning "Starting at ..."
 $START = Convert-Path .
-Write-Warning $START
+Write-Verbose "Using Bamboo path:"
+Write-Verbose $START
+
 
 cd ..\Scripts\PoshRack
 
@@ -14,6 +15,10 @@ $PackageFile = Get-ChildItem -Filter *.nupkg | sort LastWriteTime | Select-Objec
 
 # If null or empty, bail immediately
 # TODO TEST FOR NULL file name
+
+Write-Verbose "Pushing Nuget package:"
+Write-Verbose $PackageFile
+
 
 # Now we can push it to nuget.org using the NuGet command line tool
 $CMD = "$env:LocalAppData\NuGet\NuGet.exe"

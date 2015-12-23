@@ -9,9 +9,7 @@ Import-Module PoshRack
 #$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 #. "$here\$sut" 
 
-$env:RACKSPACE_USERNAME = "raxschenck"
-$env:RACKSPACE_APIKEY = "348bfda86ed349bab2d85d66bc0bf14f"
-$env:RACKSPACE_REGION = "ORD"
+
 
 Describe "Compute Create Functions" {
 	InModuleScope $ModuleName {
