@@ -6,7 +6,7 @@ Write-Warning "Starting at ..."
 $START = Convert-Path .
 Write-Warning $START
 
-cd ..\PoshRack
+cd ..\Scripts\PoshRack
 
 
 # First, we need to find the name of the package
