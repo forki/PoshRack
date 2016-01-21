@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="3" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2015-12-16" time="17:38:09">
+  <environment user="Administrator" machine-name="POSHRACK" cwd="C:\users\Administrator\Documents\WindowsPowerShell\Modules\poshrack" user-domain="POSHRACK" platform="Microsoft Windows Server 2012 R2 Standard|C:\Windows|\Device\Harddisk0\Partition1" nunit-version="2.5.8.0" os-version="6.3.9600" clr-version="4.0.30319.42000" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="Powershell" name="Pester" executed="True" result="Success" success="True" time="10.6665" asserts="0">
+    <results>
+      <test-suite type="PowerShell" name="Compute List Functions" executed="True" result="Success" success="True" time="7.2619" asserts="0">
+        <results>
+          <test-case name="Gets a list of Compute Images" time="5.4416" asserts="0" success="True" result="Success" executed="True" />
+          <test-case name="Gets a list of Compute Images" time="1.8203" asserts="0" success="True" result="Success" executed="True" />
+        </results>
+      </test-suite>
+      <test-suite type="PowerShell" name="Get or List" executed="True" result="Success" success="True" time="3.4046" asserts="0">
+        <results>
+          <test-case name="Has multiple entries" time="3.4046" asserts="0" success="True" result="Success" executed="True" />
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
